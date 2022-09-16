@@ -1,17 +1,17 @@
 // import
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
-
+const log = require('../utils/winston');
 // créer une sauce
 exports.createSauce = (req, res, next) => {
     console.log(req.body.sauce);
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
-    // delete sauceObject._userId;
+    delete sauceObject._userId;
     const sauce = new Sauce({
         ...sauceObject,
         userId: req.auth.userId,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
   
     sauce.save()
@@ -50,9 +50,17 @@ exports.likeSauce = (req, res, next) =>{
 
 // voir une sauce
 exports.getOneSauce = (req, res, next)=>{
+    log.info('getOneSauce');
     Sauce.findOne({ _id: req.params.id})
-        .then(sauce => res.status(200).json(sauce))
-        .catch(error => res.status(404).json({ error}));
+        .then(sauce =>{
+            log.info("sauce trouvé");
+            log.info(sauce);
+            res.status(200).json(sauce)
+        } )
+        .catch(error =>{
+            log.error(`${error}`);
+            res.status(404).json({ error})
+        } );
 };
 
 // voir toute les sauce
@@ -104,6 +112,3 @@ exports.deleteSauce = (req, res, next) => {
             res.status(500).json({ error });
         });
  };
-
-
-

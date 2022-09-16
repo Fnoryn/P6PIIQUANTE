@@ -1,7 +1,4 @@
 // imort 
-const {
-  model
-} = require('mongoose');
 const passwordValidator = require('password-validator');
 
 // instance

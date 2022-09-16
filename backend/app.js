@@ -1,28 +1,29 @@
 // imports
 require('dotenv').config;
 const express = require('express');
-const helmet = require('helmet')
+// const helmet = require('helmet')
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
-const saucesRoutes = require('./routes/Sauce');
+const saucesRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 const app = express();
+const log = require('./utils/winston');
+try {
+  
 
 // connexion a la base de données 
 mongoose.connect(`mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@${process.env.LINK_DB}?retryWrites=true&w=majority`,
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
-  .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
-
+  { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => log.info('Connexion à MongoDB réussie !'))
+  .catch(() => log.error('Connexion à MongoDB échouée !'));
 
 // fonction du server 
 
-// sécurisation des en-tête http
-app.use(helmet({
-  crossOriginResourcePolicy: false,
-}));
+  // sécurisation des en-tête http
+  // app.use(helmet({ crossOriginResourcePolicy: { policy: "same-site" } }));
+
+
   //paramètrage des en-têtes
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -37,12 +38,15 @@ app.use(bodyParser.json());
 
 
 
-// pour la gestion des fichiers images
+  // pour la gestion des fichiers images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
- //route
+ //routes
 app.use('/api/sauces', saucesRoutes);
-app.use('/api/auth/', userRoutes);
+app.use('/api/auth', userRoutes);
 
 // export
 module.exports = app;
+} catch (error) {
+  log.error(`erreur dans app = ${error}`);
+}
