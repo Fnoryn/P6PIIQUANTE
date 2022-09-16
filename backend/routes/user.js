@@ -1,9 +1,14 @@
+// import
 const express = require('express');
 const router = express.Router();
 const userCtrl = require('../controllers/user');
-const { route } = require('./stuff');
+const checkEmail = require('../middleware/email-validator');
+const checkPassword = require('../middleware/password-validator');
 
-router.post('/signup', userCtrl.signup);
-router.post('/login', userCtrl.login);
 
+// routes
+router.post('/signup', checkEmail, checkPassword, userCtrl.signup);
+router.post('/login',  userCtrl.login);
+
+// export
 module.exports = router;
