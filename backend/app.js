@@ -1,7 +1,7 @@
 // imports
 require('dotenv').config;
 const express = require('express');
-// const helmet = require('helmet')
+const helmet = require('helmet')
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -9,8 +9,7 @@ const saucesRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 const app = express();
 const log = require('./utils/winston');
-try {
-  
+
 
 // connexion a la base de données 
 mongoose.connect(`mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@${process.env.LINK_DB}?retryWrites=true&w=majority`,
@@ -21,7 +20,7 @@ mongoose.connect(`mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB
 // fonction du server 
 
   // sécurisation des en-tête http
-  // app.use(helmet({ crossOriginResourcePolicy: { policy: "same-site" } }));
+  app.use(helmet({ crossOriginResourcePolicy: { policy: "same-site" } }));
 
 
   //paramètrage des en-têtes
@@ -47,6 +46,3 @@ app.use('/api/auth', userRoutes);
 
 // export
 module.exports = app;
-} catch (error) {
-  log.error(`erreur dans app = ${error}`);
-}

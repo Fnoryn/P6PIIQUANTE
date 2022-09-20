@@ -1,5 +1,5 @@
 // import 
-const passwordSchema = require('../models/Password');
+const passwordSchema = require('../utils/Password');
 
 // export
 module.exports = (req, res, next) =>{
