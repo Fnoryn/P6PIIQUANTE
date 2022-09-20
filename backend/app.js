@@ -9,6 +9,7 @@ const saucesRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 const app = express();
 const log = require('./utils/winston');
+const mongoSanitize = require('express-mongo-sanitize');
 
 
 // connexion a la base de données 
@@ -36,6 +37,8 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 
+  // évité l'injection de code dans mongo
+app.use(mongoSanitize());
 
   // pour la gestion des fichiers images
 app.use('/images', express.static(path.join(__dirname, 'images')));
