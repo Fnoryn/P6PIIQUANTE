@@ -1,5 +1,7 @@
 // import
 const multer = require('multer');
+const fs = require('fs');
+const imageDir = "./images";
 
 // type de fichier acceptés
 const MIME_TYPES = {
@@ -8,6 +10,17 @@ const MIME_TYPES = {
   'image/png': 'png',
   'image/webp': 'webp'
 };
+
+if (fs.existsSync(imageDir)){
+  console.log("Dossier image déjà créé");
+} else{
+  fs.mkdir('./imges', (err) =>{
+    if (err){
+      return console.error(err);
+    }
+    console.log("Dossier images créé !");
+  });
+}
 
 // configuration
 const storage = multer.diskStorage({
