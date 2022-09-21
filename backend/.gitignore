@@ -2,3 +2,4 @@
 /images
 .env
 /log
+yarn.lock

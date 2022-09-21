@@ -42,7 +42,7 @@ exports.likeSauce = (req, res, next) =>{
         )
           .then((sauce) => res.status(200).json({ message: "Ajout Dislike" }))
           .catch((error) => res.status(400).json({ error }));
-      } else {
+      } else {//update like pour supp
         Sauce.findOne({ _id: req.params.id })
           .then((sauce) => {
             if (sauce.usersLiked.includes(req.body.userId)) {
@@ -54,7 +54,7 @@ exports.likeSauce = (req, res, next) =>{
                   res.status(200).json({ message: "Suppression Like" });
                 })
                 .catch((error) => res.status(400).json({ error }));
-            } else if (sauce.usersDisliked.includes(req.body.userId)) {
+            } else if (sauce.usersDisliked.includes(req.body.userId)) { // update dislike pour supp 
               Sauce.updateOne(
                 { _id: req.params.id },
                 {
